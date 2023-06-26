@@ -29,7 +29,12 @@ router.get(
   "/:id",
   (req, res, next) => {
     try {
-      const data = userService.getUserById(req.params.id);
+      const id = req.params.id.trim();
+      if (!id) {
+        throw RequestError(404, "Provide a valid id.");
+      }
+
+      const data = userService.getUserById(id);
       if (data) {
         res.locals.data = data;
       } else {
@@ -75,7 +80,12 @@ router.put(
     }
 
     try {
-      const data = userService.updateUserById(req.params.id, req.body);
+      const id = req.params.id.trim();
+      if (!id) {
+        throw RequestError(404, "Provide a valid id.");
+      }
+
+      const data = userService.updateUserById(id, req.body);
       if (data) {
         res.locals.data = data;
       } else {
