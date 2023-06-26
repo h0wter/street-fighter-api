@@ -14,9 +14,13 @@ initRoutes(app);
 
 app.use("/", express.static("./client/build"));
 
+app.use((_, res) => {
+  res.status(404).json({ message: "Not found" });
+});
+
 const port = 3050;
 app.listen(port, () => {
-  console.log("Server working on 3050 port");
+  console.log(`Server running. Use our API on: http://localhost:${port}`);
 });
 
 export { app };
