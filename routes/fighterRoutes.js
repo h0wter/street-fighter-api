@@ -60,7 +60,11 @@ router.post(
 
     try {
       const data = fighterService.addFighter(req.body);
-      res.locals.data = data;
+      if (data) {
+        res.locals.data = data;
+      } else {
+        throw RequestError(404, "Fighter has not been created.");
+      }
     } catch (error) {
       res.locals.err = error;
     } finally {
