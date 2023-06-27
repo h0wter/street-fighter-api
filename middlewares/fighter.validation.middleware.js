@@ -2,8 +2,7 @@ import { FIGHTER } from "../models/fighter.js";
 import { validateRequestBody } from "../helpers/ValidateRequestBody.js";
 import { RequestError } from "../helpers/RequestError.js";
 
-const NAME_REGEX = /^(?! )\S{2,}$/;
-
+const NAME_REGEX = /^(\p{L}\s*){2,}$/u;
 const isValidName = (value) => {
   const valid = NAME_REGEX.test(value);
   if (!valid) {
