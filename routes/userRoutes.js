@@ -104,7 +104,12 @@ router.delete(
   "/:id",
   (req, res, next) => {
     try {
-      const data = userService.deleteUserById(req.params.id, req.body);
+      const id = req.params.id.trim();
+      if (!id) {
+        throw RequestError(404, "Provide a valid id.");
+      }
+
+      const data = userService.deleteUserById(id, req.body);
       if (data) {
         res.locals.data = data;
       } else {
