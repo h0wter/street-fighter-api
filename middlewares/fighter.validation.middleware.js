@@ -2,7 +2,7 @@ import { FIGHTER } from "../models/fighter.js";
 import { validateRequestBody } from "../helpers/ValidateRequestBody.js";
 import { RequestError } from "../helpers/RequestError.js";
 
-const NAME_REGEX = /^(?! )[\w\s]+$/;
+const NAME_REGEX = /^(?! )\S{2,}$/;
 
 const isValidName = (value) => {
   const valid = NAME_REGEX.test(value);
@@ -91,6 +91,30 @@ const createFighterValid = (req, res, next) => {
 
 const updateFighterValid = (req, res, next) => {
   // TODO: Implement validatior for FIGHTER entity during update
+  const valid = validateRequestBody(req.body, FIGHTER, false);
+
+  if (!valid) {
+    const error = RequestError(
+      400,
+      "You need at least one field for update request."
+    );
+    res.locals.err = error;
+    next();
+    return;
+  }
+
+  const entries = Object.entries(req.body);
+
+  for (const [key, value] of entries) {
+    const { error, message } = validationObject[key](value);
+    if (error) {
+      const error = RequestError(400, message);
+      res.locals.err = error;
+      next();
+      return;
+    }
+  }
+
   next();
 };
 
