@@ -20,6 +20,20 @@ class UserService {
   }
 
   addUser(data) {
+    const users = this.getAll();
+    const duplicates = users.some(
+      ({ email, phoneNumber }) =>
+        email.toLowerCase() === data.email.toLowerCase() ||
+        phoneNumber === data.phoneNumber
+    );
+
+    if (duplicates) {
+      throw RequestError(
+        400,
+        "A user with such email or phone already exists."
+      );
+    }
+
     const newUser = userRepository.create(data);
     if (!newUser) {
       throw RequestError(

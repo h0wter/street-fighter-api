@@ -20,6 +20,15 @@ class FighterService {
   }
 
   addFighter(data) {
+    const fighters = this.getAll();
+    const duplicates = fighters.some(
+      ({ name }) => name.toLowerCase() === data.name.toLowerCase()
+    );
+
+    if (duplicates) {
+      throw RequestError(400, "A fighter with such name already exists.");
+    }
+
     const newFighter = fighterRepository.create(data);
     if (!newFighter) {
       throw RequestError(
