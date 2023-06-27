@@ -29,6 +29,34 @@ class FighterService {
     }
     return newFighter;
   }
+
+  updateFighterById(id, data) {
+    this.getFighterById(id);
+    // Checks if fighter with current id exists, if not, getFighterById
+    // throws an error and the method breaks.
+    const updatedFighter = fighterRepository.update(id, data);
+    if (!updatedFighter) {
+      throw RequestError(
+        500,
+        "An error occurred while updating fighter in database."
+      );
+    }
+    return updatedFighter;
+  }
+
+  deleteFighterById(id) {
+    this.getFighterById(id);
+    // Checks if fighter with current id exists, if not, getFighterById
+    // throws an error and the method breaks.
+    const deletedFighter = fighterRepository.delete(id);
+    if (!deletedFighter) {
+      throw RequestError(
+        500,
+        "An error occurred while deleting fighter in database."
+      );
+    }
+    return deletedFighter;
+  }
 }
 
 const fighterService = new FighterService();

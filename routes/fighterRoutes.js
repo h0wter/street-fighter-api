@@ -70,4 +70,58 @@ router.post(
   responseMiddleware
 );
 
+router.put(
+  "/:id",
+  updateFighterValid,
+  (req, res, next) => {
+    if (res.locals.err) {
+      next();
+      return;
+    }
+
+    try {
+      const id = req.params.id.trim();
+      if (!id) {
+        throw RequestError(404, "Provide a valid id.");
+      }
+
+      const data = fighterService.updateFighterById(id, req.body);
+      if (data) {
+        res.locals.data = data;
+      } else {
+        throw RequestError(404, "Fighter not found");
+      }
+    } catch (error) {
+      res.locals.err = error;
+    } finally {
+      next();
+    }
+  },
+  responseMiddleware
+);
+
+router.delete(
+  "/:id",
+  (req, res, next) => {
+    try {
+      const id = req.params.id.trim();
+      if (!id) {
+        throw RequestError(404, "Provide a valid id.");
+      }
+
+      const data = fighterService.deleteFighterById(id, req.body);
+      if (data) {
+        res.locals.data = data;
+      } else {
+        throw RequestError(404, "Fighter not found");
+      }
+    } catch (error) {
+      res.locals.err = error;
+    } finally {
+      next();
+    }
+  },
+  responseMiddleware
+);
+
 export { router };
